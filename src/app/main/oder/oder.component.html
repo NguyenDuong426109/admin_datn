@@ -1,0 +1,166 @@
+
+<section id="main-content">
+    <section class="wrapper">
+        <div class="row my-3 bg-white" style="margin-left: 0px; margin-right: 0px;">
+            <h3 class="fs-4 mb-3">Quản Lý Đơn Hàng</h3>
+            <div class="col ">
+                <div class="row">
+                    <div class="col-5">
+                        <input class="form-control" type="text" name="search" [(ngModel)]="searchText"
+                            autocomplete="off" placeholder=" Tìm kiếm danh mục">
+                    </div>
+
+
+                </div>
+
+                <table class="table table-striped rounded shadow-sm  bg-white ">
+                    <!-- <table class="table   table-hover"> -->
+                    <thead>
+                        <tr>
+
+                            <td>STT</td>
+                            <td>Mã Đơn Hàng</td>
+                            <td>Ghi chú</td>
+                            <td>Tổng Tiền</td>
+                            <td>Trạng Thái</td>
+                            <td>Chức năng</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let o of order;let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{o.order_code}}</td>
+                            <td>{{o?.order_note}}</td>
+                            <td>{{o.totalMoney}}</td>
+                            <td>{{ getStatusText(o.payment_status) }}</td>
+                            <td>
+
+                                <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal"
+                                    (click)="get_order_id(o.id)" data-bs-target="#modal_edit">
+                                    Chi tiết
+                                </button>
+                                <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal"
+                                    (click)="get_id_status(o.id)" data-bs-target="#modal_status">
+                                    Cập nhật
+                                </button>
+                                <button type="button" class="btn btn-danger" (click)="onDelete(o.id)">Xóa</button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <!-- <pagination-controls previousLabel="" nextLabel="" (pageChange)="ontableDataChange($event)">
+    </pagination-controls> -->
+                </div>
+
+                <!-- Modal thêm mới -->
+
+                <!-- Modal sua mới -->
+                <div class="modal fade" id="modal_edit" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+                            <h3 class="fs-4 mb-3">Chi tiết đơn hàng</h3>
+                            <hr>
+                        <div *ngFor="let c of customer" class="models_customer">
+                                <span>Tên khách Hàng:</span><span>{{c.name}}</span><br>
+                                <span>Địa chỉ:</span><span>{{c.adress}}</span><br>
+                                <span>Email:</span><span>{{c.email}}</span><br>
+                                <span>Số điện thoại:</span><span>{{c.phone}}</span>
+                            </div>
+                            <hr>
+
+
+
+                            <table class=" table table-striped rounded shadow-sm bg-white ">
+                                <!-- <table class=" table table-hover"> -->
+                                <thead>
+                                    <tr>
+
+                                        <td>STT</td>
+                                        <td>Ảnh</td>
+                                        <td>Tên sản phẩm</td>
+                                        
+                                        <td>Số lượng</td>
+                                        <td>Giá</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let o of order_detail;let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>
+                                            <img [src]="'http://127.0.0.1:8000/storage/image/product/'+o.img_oder"
+                                                alt="" style="width: 40px;height: 40px;">
+                                        </td>
+                                        <td *ngFor="let oder of o.product">
+                                            {{oder.name}}
+                                        </td>
+                                        <td *ngFor="let oder of o.size">{{oder.namesize}}</td>
+                                        <td *ngFor="let oder of o.color">{{oder.namecolor}}</td>
+                                        <td>{{o.quantity}}</td>
+                                        <td>{{o.price}}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <!-- trạng thái -->
+                <div class="modal fade" id="modal_status" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+
+                            <form action="" method="POST" [formGroup]="from_status" (ngSubmit)="onEdit()">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cập nhật Trạng thái</h1>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                        (click)="resetForm()"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="form-group mt-2 mb-5">
+                                        <select formControlName="payment_status"
+                                            style="width: 100%; height: 40px; border-color: rgb(197, 197, 198);border-radius: 5px;">
+                                            <option value="" disabled>--Chọn trạng thái--</option>
+                                            <option value="3">Xuất hàng</option>
+                                            <option value="4">Giao thành công</option>
+                                            <option value="5">Hủy đơn</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" (click)="resetForm()"
+                                        data-bs-dismiss="modal">Hủy</button>
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Cập
+                                        nhật</button>
+                                </div>
+                            </form>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button trigger modal -->
+        <!-- Modal -->
+    </section>
+</section>

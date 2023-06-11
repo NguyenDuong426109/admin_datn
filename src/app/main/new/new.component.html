@@ -1,0 +1,157 @@
+<section id="main-content">
+  <section class="wrapper">
+      <div class="row my-3 bg-white" style="margin-left: 0px; margin-right: 0px;">
+          <h3 class="fs-4 mb-3">Tin tức</h3>
+          <div class="col ">
+              <div class="row">
+                  <!-- <div class="col-5">
+                      <input class="form-control" type="text" name="search" [(ngModel)]="searchText"
+                          autocomplete="off" placeholder=" Tìm kiếm tin tức">
+                  </div> -->
+                  <div class="col-7">
+                      <button style="margin-left: 300px;" type="button" class="btn btn-success mt-2 " style="float: right;" data-bs-toggle="modal"
+                          data-bs-target="#models-add">
+                          Thêm mới
+                      </button>
+                  </div>
+
+              </div>
+
+              <table class="table table-striped rounded shadow-sm  bg-white ">
+                  <!-- <table class="table   table-hover"> -->
+                  <thead>
+                      <tr>
+
+                          <td>id</td>
+                          <td>Tiêu đề</td>
+                          <td>Giới thiệu</td>
+                          <td>Ảnh</td>
+                          <td>Chức năng</td>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let cate of news;let i = index">
+                          <td>{{i+1}}</td>
+                          <td>{{cate.title}}</td>
+                          <td>{{cate.description}}</td>
+                          <td> <img src="http://127.0.0.1:8000/storage/{{cate.avatar_path}}"
+                            alt="" style=" width: 80px; height: 80px"></td>
+                          <td>
+
+                              <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal"
+                                  (click)="get_id(cate.id)" data-bs-target="#modal_edit">
+                                  Sửa
+                              </button>
+                              <button type="button" class="btn btn-danger" (click)="onDelete(cate.id)">Xóa</button>
+
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+              <div>
+                  <!-- <pagination-controls previousLabel="" nextLabel="" (pageChange)="ontableDataChange($event)">
+  </pagination-controls> -->
+              </div>
+
+              <!-- Modal thêm mới -->
+              <div class="modal fade" id="models-add" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-dialog modal-xl">
+                          <div class="modal-content">
+                              <form action="" method="POST" [formGroup]="new" (ngSubmit)="onCreate()">
+                                  <div class="modal-header bg-success text-white">
+                                      <h5 class="modal-title " id="exampleModalLabel">Thêm mới</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                          aria-label="Close" (click)="resetForm()"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <div class="form-group">
+                                          <label for="">Tiêu đề <span style="color: red;">*</span></label>
+                                          <input type="text" formControlName="title" class="form-control"
+                                              placeholder="name">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="">Giới thiệu <span style="color: red;">*</span></label>
+                                        <input type="text" formControlName="description" class="form-control"
+                                            placeholder="name">
+                                      </div>
+                                      
+                                      <div class="form-group">
+                                          <label for="">Nội dung<span style="color: red;">*</span></label>
+                                          <!-- <input type="text" formControlName="description" class="form-control"
+                                              placeholder=""> -->
+                                          <ckeditor class="form-control" formControlName="content"></ckeditor>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="">Ảnh đại diện<span style="color: red;">*</span></label>
+                                        <!-- <input type="text" formControlName="description" class="form-control"
+                                            placeholder=""> -->
+                                        <input type="file" class="form-control-file img-load-input border" (change)="updateImage($event)">
+                                    </div>
+                                    <img *ngIf="previewURL" class="img-load border p-1 w-100" [src]="previewURL" style="height: 200px;object-fit:cover; max-width: 260px;">
+                                      <!-- <div *ngIf="submitted && f.name.errors">
+                                          <span style="color: #993300; font-size: 14px;" *ngIf="f.name.errors.required" >--Tên danh
+                                              mục chưa được nhập! --</span>
+                                      </div> -->
+
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary"
+                                          data-bs-dismiss="modal">Hủy</button>
+                                      <button type="submit" class="btn btn-success"
+                                          data-bs-dismiss="modal">Lưu</button>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+              <!-- Modal sua mới -->
+              <div class="modal fade" id="modal_edit" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <form action="" method="POST" [formGroup]="new" (ngSubmit)="onEdit()">
+                              <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel">Sửa tin tức</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                      (click)="resetForm()"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="form-group">
+                                  <label for="">Tiêu đề <span style="color: red;">*</span></label>
+                                  <input type="text" formControlName="title" class="form-control"
+                                      placeholder="name">
+                                </div>
+                                <div class="form-group">
+                                  <label for="">Giới thiệu <span style="color: red;">*</span></label>
+                                  <input type="text" formControlName="description" class="form-control"
+                                      placeholder="name">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="">Nội dung<span style="color: red;">*</span></label>
+                                    <!-- <input type="text" formControlName="description" class="form-control"
+                                        placeholder=""> -->
+                                    <ckeditor class="form-control" formControlName="content"></ckeditor>
+                                </div>
+
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" (click)="resetForm()"
+                                      data-bs-dismiss="modal">Hủy</button>
+                                  <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Cập
+                                      nhật</button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Button trigger modal -->
+      <!-- Modal -->
+  </section>
+</section>

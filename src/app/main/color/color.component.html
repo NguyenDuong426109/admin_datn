@@ -1,0 +1,135 @@
+<section id="main-content">
+    <section class="wrapper">
+        <div class="row my-3 bg-white" style="margin-left: 0px; margin-right: 0px;">
+            <h3 class="fs-4 mb-3">Danh mục sản phẩm</h3>
+            <div class="col ">
+                <div class="row">
+                    <div class="col-5">
+                        <input class="form-control" type="text" name="search" [(ngModel)]="searchText"
+                            autocomplete="off" placeholder=" Tìm kiếm danh mục">
+                    </div>
+                    <div class="col-7">
+                        <button type="button" class="btn btn-success mt-2 " style="float: right;" data-bs-toggle="modal"
+                            data-bs-target="#models-add">
+                            Thêm mới
+                        </button>
+                    </div>
+
+                </div>
+
+                <table class="table table-striped rounded shadow-sm  bg-white ">
+                    <!-- <table class="table   table-hover"> -->
+                    <thead>
+                        <tr>
+
+                            <td>id</td>
+                            <td>Tên color</td>
+                            <td>Mã sản phẩm</td>
+                            <td>Chức năng</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let c of color;let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{c.namecolor}}</td>
+                            <td>{{c.product_id}}</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal"
+                                    (click)="get_id(c.id)" data-bs-target="#modal_edit">
+                                    Sửa
+                                </button>
+                                <button type="button" class="btn btn-danger" (click)="onDelete(c.id)">Xóa</button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <!-- <pagination-controls previousLabel="" nextLabel="" (pageChange)="ontableDataChange($event)">
+    </pagination-controls> -->
+                </div>
+
+                <!-- Modal thêm mới -->
+                <div class="modal fade" id="models-add" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <form action="" method="POST" [formGroup]="color_product" (ngSubmit)="onCreate()">
+                                    <div class="modal-header bg-success text-white">
+                                        <h5 class="modal-title " id="exampleModalLabel">Thêm mới</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close" (click)="resetForm()"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="">Tên color<span style="color: red;">*</span></label>
+                                            <input type="text" formControlName="namecolor" class="form-control"
+                                                placeholder="namecolor">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Product_size<span style="color: red;">*</span></label>
+                                            <input type="text" formControlName="product_id" class="form-control"
+                                                placeholder="">
+                                        </div>
+                                        <!-- <div *ngIf="submitted && f.name.errors">
+                                            <span style="color: #993300; font-size: 14px;" *ngIf="f.name.errors.required" >--Tên danh
+                                                mục chưa được nhập! --</span>
+                                        </div> -->
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
+                                        <button type="submit" class="btn btn-success"
+                                            data-bs-dismiss="modal">Lưu</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Modal sua mới -->
+                <div class="modal fade" id="modal_edit" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="" method="POST" [formGroup]="color_product" (ngSubmit)="onEdit()">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Sửa color</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                        (click)="resetForm()"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="example-input-group" class="form-label">Tên danh mục <span
+                                                style="color: red;">*</span></label>
+                                        <div class="input-group input-group-outline">
+                                            <input type="text" formControlName="namecolor" placeholder=" name"
+                                                class="form-control" id="example-input-group">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Product_size<span style="color: red;">*</span></label>
+                                            <input type="text" formControlName="product_id" class="form-control"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" (click)="resetForm()"
+                                        data-bs-dismiss="modal">Hủy</button>
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Cập
+                                        nhật</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+        <!-- Modal -->
+    </section>
+</section>
